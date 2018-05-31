@@ -15,7 +15,7 @@
 
 # Ignore uploaded files in development
 /storage/*
-
+/.ideav
 /node_modules
 /yarn-error.log
 
