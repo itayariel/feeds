@@ -28,11 +28,13 @@ class FeedsController < ApplicationController
   # POST /feeds.json
   def create
     @feed = Feed.new(feed_params)
-    binding.pry
+    puts("calling job")
+
 
     respond_to do |format|
       puts 'hi'
       if @feed.save
+        PullFeedJob.perform_later(@feed.id)
         format.html { redirect_to @feed, notice: 'Feed was successfully created.' }
         format.json { render :show, status: :created, location: @feed }
       else
