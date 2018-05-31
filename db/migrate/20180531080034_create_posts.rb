@@ -5,7 +5,7 @@ class CreatePosts < ActiveRecord::Migration[5.2]
       t.text :content
       t.string :link
       t.string :img_link
-      
+
       t.belongs_to :feed, index: true
       t.timestamps
     end

@@ -1,5 +1,23 @@
-<p id="notice"><%= notice %></p>
+<p> Hello <%= current_user.name %></p>
+<div class="container">
+  <% @feeds.each do |feed| %>
+    <%= link_to feed do%>
+      <div class="card text-center text-white bg-success mb-3" style="width: 30rem;">
 
+        <img class="card-img-top" src="<%= feed.img_link %>" alt="Card image cap" style="width: 28rem;">
+        <div class="card-body">
+          <h5 class="card-title"><%= feed.title %></h5>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+  <br>
+  <br>
+  <%= link_to '+ New Feed', new_feed_path, class: 'btn btn-primary' %>
+</div><!-- container -->
+
+<!--
+<p id="notice"><%= notice %></p>
 <h1>My Feeds</h1>
 
 <table>
@@ -12,18 +30,11 @@
   </thead>
 
   <tbody>
-    <% @feeds.each do |feed| %>
       <tr>
-        <td><%= feed.title %></td>
-        <td><%= feed.link %></td>
-        <td><%= link_to 'Show', feed %></td>
-        <td><%= link_to 'Edit', edit_feed_path(feed) %></td>
-        <td><%= link_to 'Destroy', feed, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
-    <% end %>
   </tbody>
 </table>
 
 <br>
+-->
 
-<%= link_to 'New Feed', new_feed_path %>

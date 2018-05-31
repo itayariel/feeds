@@ -1,4 +1,7 @@
+require('pry')
+
 class FeedsController < ApplicationController
+  before_action :redirect_if_not_signed_in
   before_action :set_feed, only: [:show, :edit, :update, :destroy]
 
   # GET /feeds
@@ -25,12 +28,15 @@ class FeedsController < ApplicationController
   # POST /feeds.json
   def create
     @feed = Feed.new(feed_params)
+    binding.pry
 
     respond_to do |format|
+      puts 'hi'
       if @feed.save
         format.html { redirect_to @feed, notice: 'Feed was successfully created.' }
         format.json { render :show, status: :created, location: @feed }
       else
+        puts @feed.errors
         format.html { render :new }
         format.json { render json: @feed.errors, status: :unprocessable_entity }
       end
@@ -69,6 +75,11 @@ class FeedsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def feed_params
-      params.require(:feed).permit(:title, :link)
+      params.require(:feed).permit(:title, :link, :img_link).merge(user_id: current_user.id)
     end
+
+    def redirect_if_not_signed_in
+      redirect_to login_path if !user_signed_in?
+    end
+
 end
