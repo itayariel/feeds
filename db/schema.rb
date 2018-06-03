@@ -28,9 +28,10 @@ ActiveRecord::Schema.define(version: 2018_05_31_080034) do
 
   create_table "posts", force: :cascade do |t|
     t.string "title"
-    t.text "content"
+    t.text "description"
     t.string "link"
     t.string "img_link"
+    t.string "html"
     t.bigint "feed_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
