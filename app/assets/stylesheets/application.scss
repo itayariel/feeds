@@ -13,6 +13,7 @@
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "bootstrap-table";
 
 // Partials - main css files
 @import "partials/*";
@@ -55,5 +56,7 @@ a:hover, a:active, a:link, a:visited {
   display: none;
 }
 
-
+.truncatedText {
+  word-wrap: break-word;
+}
 

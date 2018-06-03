@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+<div class="container" id="sign-up-form">
+  <div class="row">
+    <h1><%= @post.title %></h1>
+    <div class="col-sm-offset-2 col-sm-8">
+      <audio controls preload="false">
+        <source src="<%= @post.link %>" type="audio/mp3">
+      </audio>
+      <%=@post.html.html_safe%>
+    </div>
+  </div>
+  <%= link_to 'Back', feed_path(@post.feed_id) %>
+</div>
+<h1>Post Page!!</h1>

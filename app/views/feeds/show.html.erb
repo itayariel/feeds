@@ -1,14 +1,36 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Title:</strong>
-  <%= @feed.title %>
-</p>
+<div class="container" id="sign-up-form">
+  <div class="row">
+    <%= link_to 'Edit', edit_feed_path(@feed) %> |
+    <%= link_to 'Delete', feed_path(@feed),
+                data: {:confirm => 'Are you sure?'}, :method => :delete %> |
+    <%= link_to 'Back', feeds_path %>
+    <h1><%= @feed.title %></h1>
+    <div class="col-sm-offset-2 col-sm-8">
+      <table data-toggle="table" data-pagination="true" data-search="true">
+        <thead>
+        <tr>
+          <th>Item Title</th>
+          <th>Listen</th>
+          <th>Item Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @feed.posts.each do |post| %>
+          <tr>
+            <td><%= link_to post.title, post_path(post) %></td>
+            <td>
+              <audio controls preload="false">
+                <source src="<%= post.link %>" type="audio/mp3">
+              </audio>
+            </td>
+            <td class="truncatedText"><%= post.description %></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
-<p>
-  <strong>Link:</strong>
-  <%= @feed.link %>
-</p>
-
-<%= link_to 'Edit', edit_feed_path(@feed) %> |
-<%= link_to 'Back', feeds_path %>

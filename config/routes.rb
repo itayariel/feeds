@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     get 'signup', to: 'devise/registrations#new'
   end
   resources :feeds
+  resources :posts
 
 
   root 'feeds#index'
