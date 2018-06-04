@@ -82,9 +82,7 @@ class FeedsController < ApplicationController
   # DELETE /feeds/1.json
   def destroy
     @feed.destroy
-    respond_to do |format|
-      format.json { head :no_content }
-    end
+    redirect_to root_path
   end
 
   private

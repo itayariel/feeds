@@ -1,8 +1,9 @@
-<p id="notice"><%= notice %></p>
 
 <div class="container">
   <div class="row">
     <div class="col-sm-offset-2 col-sm-8">
+      <p id="notice"><%= notice %></p>
+      <h5>Hi, <%= current_user.name %></h5>
       <div class="btn-toolbar">
         <%= link_to '+ New Feed', new_feed_path, class: 'btn btn-primary' %>
         <%= link_to 'Logout', destroy_user_session_path, :method => :delete, :class => "btn btn-primary"  %>

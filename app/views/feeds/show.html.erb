@@ -1,8 +1,9 @@
-<p id="notice"><%= notice %></p>
 
 <div class="container" id="sign-up-form">
   <div class="row">
     <div class="col-sm-offset-2 col-sm-8">
+      <p id="notice"><%= notice %></p>
+      <h5>Hi, <%= current_user.name %></h5>
       <div class="btn-toolbar">
         <%= link_to 'Edit', edit_feed_path(@feed), :class => "btn btn-primary" %>
         <%= link_to 'Delete', feed_path(@feed),
@@ -34,7 +35,7 @@
         </div>
       </div>
       <h1><%= @feed.title %></h1>
-      <table data-toggle="table" data-pagination="true" data-search="true">
+      <table id="posts" data-toggle="table" data-pagination="true" data-search="true">
         <thead>
         <tr>
           <th>Item Title</th>
@@ -104,5 +105,9 @@
                 console.log('got error');
             },
         });
+    });
+    $(document).ready(function() {
+        $('#members').bootstrapTable();
+        $('#posts').bootstrapTable();
     });
 </script>

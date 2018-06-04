@@ -6,9 +6,8 @@
       <audio controls preload="false">
         <source src="<%= @post.link %>" type="audio/mp3">
       </audio>
-      <%=@post.html.html_safe%>
+      <%=@post.html.html_safe if !@post.html.nil?%>
     </div>
   </div>
   <%= link_to 'Back', feed_path(@post.feed_id) %>
 </div>
-<h1>Post Page!!</h1>
