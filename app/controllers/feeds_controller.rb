@@ -25,8 +25,6 @@ class FeedsController < ApplicationController
           "member": !@feed_members.where({user: user}).empty?
       }
     end
-    puts('giving back')
-    puts(@users)
   end
 
   # GET /feeds/new
@@ -42,11 +40,9 @@ class FeedsController < ApplicationController
   # POST /feeds.json
   def create
     @feed = Feed.new(feed_params)
-    puts("calling job")
 
 
     respond_to do |format|
-      puts 'hi'
       if @feed.save
         fm = FeedMember.new(feed: @feed, user: current_user)
         fm.save()
@@ -54,7 +50,6 @@ class FeedsController < ApplicationController
         format.html { redirect_to @feed, notice: 'Feed was successfully created.' }
         format.json { render :show, status: :created, location: @feed }
       else
-        puts @feed.errors
         format.html { render :new }
         format.json { render json: @feed.errors, status: :unprocessable_entity }
       end
@@ -108,10 +103,6 @@ class FeedsController < ApplicationController
     end
 
     def check_owner
-      puts('checking auth')
-      puts(current_user.id.to_s)
-      puts(@feed.owner_id.to_s)
-      puts(current_user.id.to_s != @feed.owner_id.to_s)
       redirect_to feed_path(@feed) if current_user.id.to_s != @feed.owner_id.to_s
     end
 
