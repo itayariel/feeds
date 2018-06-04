@@ -4,8 +4,8 @@ class CreateFeeds < ActiveRecord::Migration[5.2]
       t.string :title
       t.string :link
       t.string :img_link
+      t.string :owner_id
 
-      t.belongs_to :user, index: true
       t.timestamps
     end
     add_index :feeds, :title

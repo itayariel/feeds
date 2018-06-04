@@ -1,4 +1,4 @@
 class Feed < ApplicationRecord
-  belongs_to :user
   has_many :posts, dependent: :destroy
+  has_many :feed_members, dependent: :destroy
 end

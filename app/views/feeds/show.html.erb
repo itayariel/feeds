@@ -2,12 +2,38 @@
 
 <div class="container" id="sign-up-form">
   <div class="row">
-    <%= link_to 'Edit', edit_feed_path(@feed) %> |
-    <%= link_to 'Delete', feed_path(@feed),
-                data: {:confirm => 'Are you sure?'}, :method => :delete %> |
-    <%= link_to 'Back', feeds_path %>
-    <h1><%= @feed.title %></h1>
     <div class="col-sm-offset-2 col-sm-8">
+      <div class="btn-toolbar">
+        <%= link_to 'Edit', edit_feed_path(@feed), :class => "btn btn-primary" %>
+        <%= link_to 'Delete', feed_path(@feed),
+                    data: {:confirm => 'Are you sure?'}, :method => :delete, :class => "btn btn-primary"  %>
+        <%= link_to 'Back', feeds_path, :class => "btn btn-primary"  %>
+        <a class="btn btn-primary" data-toggle="collapse" href="#editMembers" role="button" aria-expanded="false" aria-controls="collapseExample">
+          Edit members
+        </a>
+      </div>
+      <div class="collapse" id="editMembers">
+        <div class="card card-body">
+          <table id="members" data-toggle="table" data-pagination="true" data-search="true" data-checkbox-header="false">
+            <thead>
+            <tr>
+              <th data-checkbox="true"></th>
+              <th>Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @users.each do |user| %>
+              <tr id="<%=user[:id]%>">
+                <td checked=false stam="90">
+                </td>
+                <td><%=user[:name]%></td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <h1><%= @feed.title %></h1>
       <table data-toggle="table" data-pagination="true" data-search="true">
         <thead>
         <tr>
@@ -33,4 +59,50 @@
     </div>
   </div>
 </div>
+<script type="text/javascript">
+    $('#members').on('check.bs.table', function (e, row, $element) {
+        var params = {
+            user_id: row._id,
+            id: <%=@feed.id %>
+        }
+        var token = $("meta[name='csrf-token']").attr("content");
+        $.ajax({
+            type: "PUT",
+            url: "/feeds/<%=@feed.id %>/add_member",
+            data: JSON.stringify(params),
+            headers: {
+                'Content-type': 'application/json',
+                'X-CSRF-TOKEN': token
+            },
+            success:(data) => {
+                console.log('got success');
+            },
+            error:(data) => {
+                console.log('got error');
+            },
+        });
+    });
 
+    $('#members').on('uncheck.bs.table', function (e, row, $element) {
+        var params = {
+            user_id: row._id,
+            id: <%=@feed.id %>
+        }
+        var token = $("meta[name='csrf-token']").attr("content");
+        $.ajax({
+            type: "DELETE",
+            url: "/feeds/<%=@feed.id %>/remove_member",
+            data: JSON.stringify(params),
+            headers: {
+                'Content-type': 'application/json',
+                'X-CSRF-TOKEN': token
+            },
+            success:(data) => {
+                console.log('got success');
+            },
+            error:(data) => {
+                console.log('got error');
+            },
+        });
+    });
+</script>

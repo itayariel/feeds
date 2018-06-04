@@ -2,17 +2,31 @@ require('pry')
 
 class FeedsController < ApplicationController
   before_action :redirect_if_not_signed_in
-  before_action :set_feed, only: [:show, :edit, :update, :destroy]
+  before_action :set_feed, only: [:show, :edit, :update, :destroy, :add_member, :remove_member]
+  before_action :check_owner, only: [:edit, :update, :destroy, :add_member, :remove_member]
 
   # GET /feeds
   # GET /feeds.json
   def index
-    @feeds = Feed.all
+    @feeds = Feed.joins(:feed_members).where(feed_members: { user: current_user })
   end
 
   # GET /feeds/1
   # GET /feeds/1.json
   def show
+    @feed_members = FeedMember.where({feed: @feed})
+    @users = User.all.select do |hash|
+      hash[:id] != current_user.id
+    end
+    @users = @users.map do |user|
+      {
+          "name": user.name,
+          "id": user.id,
+          "member": !@feed_members.where({user: user}).empty?
+      }
+    end
+    puts('giving back')
+    puts(@users)
   end
 
   # GET /feeds/new
@@ -34,6 +48,8 @@ class FeedsController < ApplicationController
     respond_to do |format|
       puts 'hi'
       if @feed.save
+        fm = FeedMember.new(feed: @feed, user: current_user)
+        fm.save()
         PullFeedJob.perform_later(@feed.id)
         format.html { redirect_to @feed, notice: 'Feed was successfully created.' }
         format.json { render :show, status: :created, location: @feed }
@@ -59,12 +75,19 @@ class FeedsController < ApplicationController
     end
   end
 
+  def add_member
+    fm = FeedMember.where(feed: @feed, user: User.find(params['user_id'])).first_or_create
+  end
+
+  def remove_member
+    fm = FeedMember.where(feed: @feed, user: User.find(params['user_id'])).delete_all
+  end
+
   # DELETE /feeds/1
   # DELETE /feeds/1.json
   def destroy
     @feed.destroy
     respond_to do |format|
-      format.html { redirect_to feeds_url, notice: 'Feed was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -77,11 +100,19 @@ class FeedsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def feed_params
-      params.require(:feed).permit(:title, :link, :img_link).merge(user_id: current_user.id)
+      params.require(:feed).permit(:title, :link, :img_link).merge(owner_id: current_user.id)
     end
 
     def redirect_if_not_signed_in
       redirect_to login_path if !user_signed_in?
+    end
+
+    def check_owner
+      puts('checking auth')
+      puts(current_user.id.to_s)
+      puts(@feed.owner_id.to_s)
+      puts(current_user.id.to_s != @feed.owner_id.to_s)
+      redirect_to feed_path(@feed) if current_user.id.to_s != @feed.owner_id.to_s
     end
 
 end

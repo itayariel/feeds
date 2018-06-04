@@ -3,20 +3,26 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-offset-2 col-sm-8">
-    <% @feeds.each do |feed| %>
-      <div class="col-md-6">
-          <%= link_to feed do%>
-            <div class="card text-center text-white bg-success mb-3" style="display: inline-block">
-
-              <img class="card-img-top" src="<%= feed.img_link %>" alt="Card image cap" style="display: inline-block">
-              <div class="card-body">
-                <h5 class="card-title"><%= feed.title %></h5>
-              </div>
-            </div>
-          <% end %>
+      <div class="btn-toolbar">
+        <%= link_to '+ New Feed', new_feed_path, class: 'btn btn-primary' %>
+        <%= link_to 'Logout', destroy_user_session_path, :method => :delete, :class => "btn btn-primary"  %>
       </div>
-    <% end %>
-    <%= link_to '+ New Feed', new_feed_path, class: 'btn btn-primary' %>
+      <br>
+      <div>
+        <% @feeds.each do |feed| %>
+          <div class="col-md-6">
+              <%= link_to feed do%>
+                <div class="card text-center text-white bg-success mb-3" style="display: inline-block">
+
+                  <img class="card-img-top" src="<%= feed.img_link %>" alt="Card image cap" style="display: inline-block">
+                  <div class="card-body">
+                    <h5 class="card-title"><%= feed.title %></h5>
+                  </div>
+                </div>
+              <% end %>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>

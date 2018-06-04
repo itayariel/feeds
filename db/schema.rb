@@ -10,20 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_31_080034) do
+ActiveRecord::Schema.define(version: 2018_06_03_074946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "feed_members", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "feed_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["feed_id"], name: "index_feed_members_on_feed_id"
+    t.index ["user_id"], name: "index_feed_members_on_user_id"
+  end
 
   create_table "feeds", force: :cascade do |t|
     t.string "title"
     t.string "link"
     t.string "img_link"
-    t.bigint "user_id"
+    t.string "owner_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["title"], name: "index_feeds_on_title"
-    t.index ["user_id"], name: "index_feeds_on_user_id"
   end
 
   create_table "posts", force: :cascade do |t|
